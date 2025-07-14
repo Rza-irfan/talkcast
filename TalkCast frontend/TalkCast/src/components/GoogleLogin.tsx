@@ -1,69 +1,48 @@
-import React, { useEffect } from "react";
-import { GOOGLE_CLIENT_ID } from "../config";
-import { useDispatch } from 'react-redux';
-import { setToken } from '../slice/authSlice';
-import { useNavigate } from 'react-router-dom';
+// GoogleOAuthLogin.tsx
+import React from "react";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import type { CredentialResponse } from "@react-oauth/google";
+import axios from "axios";
 
-const GoogleLogin: React.FC = () => {
+const CLIENT_ID = "494131558045-mt4avl1rfuf59oj5r73b2fihrtokfc0m.apps.googleusercontent.com"
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();  
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
+const GoogleOAuthLogin: React.FC = () => {
+  const handleLoginSuccess = async (credentialResponse: CredentialResponse): Promise<void> => {
+    const token = credentialResponse.credential;
 
-    script.onload = () => {
-      if (window.google) {
-        window.google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: handleCredentialResponse,
-          auto_select: true,
-        });
+    if (!token) {
+      console.error("No credential received from Google.");
+      return;
+    }
 
-        const buttonContainer = document.getElementById("google-signin-button");
-        if (buttonContainer) {
-          window.google.accounts.id.renderButton(buttonContainer, {
-            theme: "outline",
-            size: "large",
-            shape: "pill",
-            text: "signin_with",
+    console.log("Google JWT Token:", token);
+
+    try {
+        const response = await axios.post("http://localhost:8080/api/youtube/broadcast", {
+            token,
           });
-        }
+      console.log("Backend response:", response.data);
 
-        window.google.accounts.id.prompt();
-      }
+      localStorage.setItem("accessToken", response.data.accessToken);
 
-
-    };
-
-    document.body.appendChild(script);
-  }, []);
-
-  const handleCredentialResponse = (response: CredentialResponse) => {
-    console.log("Google ID Token:", response);
-
-    fetch("http://localhost:8080/oauth2/callback", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ credential: response.credential }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Auth success:", data);
-        const idToken = response;
-        dispatch(setToken(idToken.clientId)); // ✅ Store in Redux
-        navigate("/broadcast"); // ✅ Navigate after storing
-      })
-      .catch((err) => {
-        console.error("Auth failed:", err);
-      });
+      // Redirect to broadcast page
+      window.location.href = "/broadcast";
+    } catch (error) {
+      console.error("Error during backend call:", error);
+    }
   };
 
-  return <div id="google-signin-button"></div>;
+  return (
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <div className="flex justify-center items-center h-screen">
+        <GoogleLogin
+          onSuccess={handleLoginSuccess}
+          onError={() => console.error("Google login failed")}
+          useOneTap
+        />
+      </div>
+    </GoogleOAuthProvider>
+  );
 };
 
-export default GoogleLogin;
+export default GoogleOAuthLogin;
