@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+google:
+  client:
+    id: YOUR_GOOGLE_CLIENT_ID
+    secret: YOUR_GOOGLE_CLIENT_SECRET
+    redirect-uri: http://localhost:8080/oauth2callback

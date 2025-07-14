@@ -1,0 +1,1 @@
+export const GOOGLE_CLIENT_ID = "494131558045-mt4avl1rfuf59oj5r73b2fihrtokfc0m.apps.googleusercontent.com"; // Replace with your OAuth 2.0 client ID
