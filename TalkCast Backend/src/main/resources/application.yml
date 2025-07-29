@@ -9,6 +9,9 @@ spring:
       - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
 google:
   client:
-    id: YOUR_GOOGLE_CLIENT_ID
-    secret: YOUR_GOOGLE_CLIENT_SECRET
-    redirect-uri: http://localhost:8080/oauth2callback
+    id: ${CLIENT_ID}
+    secret: ${CLIENT_SECRET}
+    redirect-uri: ${REDIRECT_URL}
+    token-url: ${TOKEN_URL}
+
+
