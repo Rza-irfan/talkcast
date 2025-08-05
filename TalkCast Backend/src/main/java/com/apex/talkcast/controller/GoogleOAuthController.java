@@ -1,13 +1,11 @@
 package com.apex.talkcast.controller;
 
-import com.apex.talkcast.request.BroadcastReq;
-import com.apex.talkcast.service.YouTubeBroadcastService;
+import com.apex.talkcast.response.AuthResponse;
+import com.apex.talkcast.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -15,16 +13,11 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class GoogleOAuthController {
 
-    private final YouTubeBroadcastService googleOAuthService;
+    private final OAuthService oAuthService;
 
-    @PostMapping("/api/youtube/broadcast")
-    public ResponseEntity<String> createBroadcast(@RequestBody BroadcastReq request) {
-    try {
-        var response = googleOAuthService.createBroadcast(request);
-      return ResponseEntity.ok(response);
-    } catch (Exception e) {
-      log.error("Failed to create YouTube broadcast", e);
-      return ResponseEntity.status(500).body("Broadcast creation failed: " + e.getMessage());
+    @PostMapping("/api/access-token")
+    public ResponseEntity<AuthResponse> getAccessToken(@RequestParam String authCode) {
+        var response = oAuthService.getAccessToken(authCode);
+        return ResponseEntity.ok(AuthResponse.builder().accessToken(response).build());
     }
-  }
 }

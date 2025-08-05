@@ -7,11 +7,28 @@ spring:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
       - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
       - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 512MB
+      max-request-size: 512MB
+
 google:
   client:
     id: ${CLIENT_ID}
     secret: ${CLIENT_SECRET}
     redirect-uri: ${REDIRECT_URL}
     token-url: ${TOKEN_URL}
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static: ${AWS_REGION:us-east-1}
+
+
+
 
 

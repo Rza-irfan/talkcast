@@ -1,14 +1,19 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { store } from './store/store.ts';
+import { store, persistor } from './store/store.ts';
 import { Provider } from 'react-redux';
+import { SnackbarProvider } from 'notistack';
+import { PersistGate } from 'redux-persist/integration/react';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <Provider store={store}>
-      <App />
+      <SnackbarProvider maxSnack={3}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </SnackbarProvider>
     </Provider>
-  </StrictMode>,
+  // </StrictMode>,
 )

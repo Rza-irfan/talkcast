@@ -1,18 +1,21 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import GoogleLogin from './components/GoogleLogin';
-import BroadcastForm from './components/BroadCastForm'; // Don't forget this import
+import BroadcastForm from './pages/BroadCastForm'; // Don't forget this import
+import AuthPage from './pages/AuthPage';
+import Dashboard from './pages/Dashboard';
+import VideoUploadForm from './pages/VideoUploadForm';
+import YouTubeShortUpload from './pages/YoutubeShortUpload';
 
 function App() {
   return (
     <BrowserRouter>
-      <div style={{ padding: "1rem" }}>
-        <h1>YouTube Stream App</h1>
-        <Routes>
-          <Route path="/" element={<GoogleLogin />} />
-          <Route path="/broadcast" element={<BroadcastForm />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<AuthPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/broadcast" element={<BroadcastForm />} />
+        <Route path="/uploadVideo" element={<VideoUploadForm />} />
+        <Route path="/uploadShort" element={<YouTubeShortUpload />} />
+      </Routes>
     </BrowserRouter>
   );
 }

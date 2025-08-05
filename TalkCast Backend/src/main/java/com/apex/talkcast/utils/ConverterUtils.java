@@ -11,4 +11,9 @@ public class ConverterUtils {
         long millis = localDateTime.atZone(zoneId).toInstant().toEpochMilli();
         return new DateTime(millis);
     }
+
+    public static <T> T defaultIfNull(T value, T defaultValue) {
+        return value != null ? value : defaultValue;
+    }
+
 }
